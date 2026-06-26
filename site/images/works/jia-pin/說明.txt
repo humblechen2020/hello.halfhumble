@@ -1,0 +1,27 @@
+# jia-pin 圖片資料夾說明
+
+已套用「小農大聯盟3.0」提案 PDF 中的真實設計稿（截自提案 PDF 頁面），
+檔名為兩位數編號＋說明，已直接在 jia-pin.html 與 work.html 中套用：
+
+01-hero.png — Hero Visual · 封面（孵化場小雞照）
+02-problem.png — 問題診斷三項（無品牌識別／無B2C銷售窗口／食農推廣斷鏈）
+03-field-strategy.png — 半開放式三圈場域設計圖
+03-2.png — 半開放式場域策略應用視覺（補充圖，置於 04-dual-track.png 之前）
+04-dual-track.png — 雙軌品牌策略圖（B2B技術軸／食農教育軸）
+05-logo.png — 主標誌設計
+06-logo-construction.png — 標誌構成稿
+07-logo-variations.png — 標誌變化形式
+08-primary-colors.png — 主色調（恆溫智藍／破殼雛金）
+09-secondary-colors.png — 輔色系統
+10-website-architecture.png — 網站架構圖
+11-packaging-vehicle.png — 包裝與車輛識別 mockup
+12-uniform-signage.png — 員工制服與場域指標 mockup
+13-sticker.png — 嘉品夢想家貼紙設計
+14-teaching-kit.png — 食農教具／拼圖設計
+1.webp — 吉祥物跨主題動態貼圖（原 我們都是小雞(3)-2.gif 轉檔，動態 webp）
+002.png / 003.png — 吉祥物貼圖應用補充圖（與 1.webp 同一區塊）
+15.png / 16.jpg / 17.png / 18.png — Module 7 Conclusion 滿版畫廊四張現場實拍
+
+網站實際連結：https://jiapin-poultry.netlify.app/（已加在 Module 5 Website 區塊）
+
+若之後有更高解析度的原始檔（非 PDF 截圖），可直接用相同編號覆蓋取代。

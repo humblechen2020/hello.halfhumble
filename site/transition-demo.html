@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Transition Demo · 半熟漢堡</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+  :root {
+    --ink: #111111;
+    --paper: #FFFFFF;
+    --indigo: #58A6FF;
+    --signal: #FF6B6B;
+    --paper-deep: #FFEDD5;
+    --hop: cubic-bezier(0.56, 0, 0.35, 0.98);
+    --trans-dur: 1250ms;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    font-family: -apple-system, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: var(--paper); color: var(--ink);
+    display: grid; place-items: center; gap: 24px;
+    overflow: hidden;
+  }
+  .demo-stage {
+    display: grid; gap: 18px; place-items: center;
+    text-align: center;
+  }
+  h1 { font-size: 28px; margin: 0; letter-spacing: -0.01em; }
+  p { margin: 0; color: #666; font-size: 13px; letter-spacing: 0.04em; }
+  .controls { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  button {
+    appearance: none; border: 1.5px solid var(--ink); background: var(--paper);
+    padding: 12px 22px; font: inherit; font-size: 13px; letter-spacing: 0.18em;
+    text-transform: uppercase; cursor: pointer; border-radius: 999px;
+    transition: background 240ms ease, color 240ms ease;
+  }
+  button:hover { background: var(--ink); color: var(--paper); }
+  button.alt { border-color: var(--signal); color: var(--signal); }
+  button.alt:hover { background: var(--signal); color: var(--paper); }
+
+  /* === 直接複製自 styles.css，方便獨立預覽 === */
+  .page-curtain {
+    position: fixed; inset: 0; z-index: 9500;
+    background: transparent;
+    pointer-events: none;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .page-curtain-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+    pointer-events: none;
+  }
+  .page-curtain-path {
+    d: path("M 0 100 V 100 Q 50 100 100 100 V 100 z");
+    will-change: d;
+  }
+  .page-curtain.is-entering .page-curtain-path {
+    animation: hh-curtain-cover var(--trans-dur) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes hh-curtain-cover {
+    0%   { d: path("M 0 100 V 100 Q 50 100 100 100 V 100 z"); }
+    55%  { d: path("M 0 100 V 35  Q 50 -22 100 35  V 100 z"); }
+    100% { d: path("M 0 100 V 0   Q 50 0   100 0   V 100 z"); }
+  }
+  .page-curtain.is-entering.is-exiting .page-curtain-path {
+    animation: hh-curtain-reveal var(--trans-dur) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes hh-curtain-reveal {
+    0%   { d: path("M 0 0  V 0   Q 50 0    100 0   V 0 z"); }
+    55%  { d: path("M 0 0  V -55 Q 50 -115 100 -55 V 0 z"); }
+    100% { d: path("M 0 -100 V -100 Q 50 -100 100 -100 V -100 z"); }
+  }
+
+  .page-curtain-mark {
+    position: relative; z-index: 1;
+    width: 96px; height: 76px;
+    background-color: var(--paper);
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 22' fill='none'><path d='M2 18 a12 12 0 0 1 24 0 z' fill='black'/><circle cx='10' cy='13' r='1.6' fill='%23FFFFFF'/><circle cx='18' cy='13' r='1.6' fill='%23FFFFFF'/><line x1='9' y1='17' x2='19' y2='17' stroke='%23FFFFFF' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 22' fill='none'><path d='M2 18 a12 12 0 0 1 24 0 z' fill='black'/><circle cx='10' cy='13' r='1.6' fill='%23FFFFFF'/><circle cx='18' cy='13' r='1.6' fill='%23FFFFFF'/><line x1='9' y1='17' x2='19' y2='17' stroke='%23FFFFFF' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: contain; mask-size: contain;
+    opacity: 0;
+    transform: translateY(20%);
+    transition: opacity 360ms ease, transform 720ms var(--hop);
+  }
+  .page-curtain.is-entering .page-curtain-mark {
+    opacity: 1; transform: translateY(0);
+    transition-delay: 360ms, 280ms;
+  }
+  .page-curtain.is-entering.is-exiting .page-curtain-mark {
+    opacity: 0; transform: translateY(-20%);
+    transition-delay: 0ms, 0ms;
+    transition-duration: 320ms, 480ms;
+  }
+</style>
+</head>
+<body>
+  <div class="demo-stage">
+    <h1>Curtain · Smooth Sweep</h1>
+    <p>SVG Q-curve / Grapefruit Pink → Cool Horizon / 1.25s · cubic-bezier(0.22, 1, 0.36, 1)</p>
+    <div class="controls">
+      <button id="play-cover">Play Cover</button>
+      <button class="alt" id="play-reveal">Play Reveal (進站)</button>
+      <button id="play-full">Cover → Reveal 連跑</button>
+    </div>
+    <p>※ 連續 Cover→Reveal 模擬 SPA 流程；正式版用 hard navigate，新頁載入即定格在初始狀態</p>
+  </div>
+
+  <div class="page-curtain" aria-hidden="true">
+    <svg class="page-curtain-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="hh-curtain-grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+          <stop offset="0.15" stop-color="#FF6B6B"/>
+          <stop offset="0.85" stop-color="#58A6FF"/>
+        </linearGradient>
+      </defs>
+      <path class="page-curtain-path" fill="url(#hh-curtain-grad)" d="M 0 100 V 100 Q 50 100 100 100 V 100 z"/>
+    </svg>
+    <div class="page-curtain-mark"></div>
+  </div>
+
+  <script>
+    const curtain = document.querySelector('.page-curtain');
+    const path = document.querySelector('.page-curtain-path');
+    const wait = (ms) => new Promise(r => setTimeout(r, ms));
+    const reset = () => {
+      curtain.classList.remove('is-entering', 'is-exiting');
+      // 強制 reflow，讓下次 animation 一定會重播
+      void curtain.offsetWidth;
+    };
+    document.getElementById('play-cover').addEventListener('click', async () => {
+      reset();
+      curtain.classList.add('is-entering');
+      await wait(1400);
+      reset();
+    });
+    document.getElementById('play-reveal').addEventListener('click', async () => {
+      reset();
+      curtain.classList.add('is-entering', 'is-exiting');
+      await wait(1400);
+      reset();
+    });
+    document.getElementById('play-full').addEventListener('click', async () => {
+      reset();
+      curtain.classList.add('is-entering');
+      await wait(1250);
+      curtain.classList.add('is-exiting');
+      await wait(1400);
+      reset();
+    });
+  </script>
+</body>
+</html>

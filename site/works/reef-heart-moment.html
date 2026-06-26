@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover">
+  <title>宜居實習生｜礁心時刻 — 半熟漢堡</title>
+  <meta name="description" content="礁心時刻是一個跨世代青銀互動的服務設計專案，以多層次任務模組串聯礁溪在地60-70歲年長者與7-12歲孩童，設計主視覺識別、時光寶盒包裝與互動遊玩模組，讓兩代人在同一個任務裡找到對話的理由。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=TASA+Orbiter:ital,wght@0,400;0,500;0,700;0,900;1,700;1,900&family=TASA+Orbiter+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* ── 礁心時刻 custom ── */
+    .rhm-section {
+      padding: var(--sp-4xl) 0;
+    }
+    .rhm-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 var(--sp-xl);
+    }
+
+    /* Problem cards */
+    .rhm-problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-lg);
+      margin-top: var(--sp-2xl);
+    }
+    @media (max-width: 768px) {
+      .rhm-problem-grid { grid-template-columns: 1fr; }
+    }
+    .rhm-problem-card {
+      background: #f5ede6;
+      border-radius: 2px;
+      padding: var(--sp-xl) var(--sp-lg);
+    }
+    .rhm-problem-card h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 0 var(--sp-sm);
+      color: #1a1a1a;
+    }
+    .rhm-problem-card p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #555;
+      margin: 0;
+    }
+    .rhm-problem-num {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #b05c3a;
+      margin-bottom: var(--sp-xs);
+    }
+
+    /* Task types */
+    .rhm-tasks {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-md);
+      margin-top: var(--sp-2xl);
+    }
+    @media (max-width: 768px) {
+      .rhm-tasks { grid-template-columns: repeat(2, 1fr); }
+    }
+    .rhm-task-item {
+      background: #fff;
+      border: 1.5px solid #e8ddd6;
+      border-radius: 2px;
+      padding: var(--sp-lg) var(--sp-md);
+      text-align: center;
+    }
+    .rhm-task-num {
+      display: block;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #b05c3a;
+      line-height: 1;
+      margin-bottom: var(--sp-xs);
+    }
+    .rhm-task-name {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: var(--sp-xs);
+    }
+    .rhm-task-desc {
+      font-size: 0.82rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    /* Difficulty row */
+    .rhm-difficulty {
+      display: flex;
+      gap: var(--sp-md);
+      margin-top: var(--sp-xl);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .rhm-diff-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #999;
+    }
+    .rhm-diff-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .rhm-diff-tag.easy  { background: #e8f5e9; color: #388e3c; }
+    .rhm-diff-tag.mid   { background: #fff3e0; color: #f57c00; }
+    .rhm-diff-tag.hard  { background: #fce4ec; color: #c62828; }
+
+    /* Timeline / roadmap */
+    .rhm-roadmap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-lg);
+      margin-top: var(--sp-2xl);
+    }
+    @media (max-width: 768px) {
+      .rhm-roadmap { grid-template-columns: 1fr; }
+    }
+    .rhm-phase {
+      border-top: 3px solid #b05c3a;
+      padding-top: var(--sp-md);
+    }
+    .rhm-phase-label {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #b05c3a;
+      margin-bottom: var(--sp-sm);
+    }
+    .rhm-phase h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 var(--sp-xs);
+    }
+    .rhm-phase p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #666;
+      margin: 0;
+    }
+
+    /* Packaging grid */
+    .rhm-box-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    .rhm-box-grid img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .rhm-box-grid { grid-template-columns: 1fr; }
+    }
+
+    /* 錦囊 grid */
+    .rhm-jinnang-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      background: #1a1210;
+    }
+    .rhm-jinnang-grid img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .rhm-jinnang-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Credits */
+    .rhm-credits {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--sp-md) var(--sp-xl);
+      margin-top: var(--sp-xl);
+    }
+    .rhm-credits dl {
+      margin: 0;
+    }
+    .rhm-credits dt {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #b05c3a;
+      margin-bottom: 2px;
+    }
+    .rhm-credits dd {
+      margin: 0;
+      font-size: 0.92rem;
+      color: #333;
+    }
+
+    /* Icon flow image */
+    .rhm-flow-wrap {
+      background: #fff8f4;
+      padding: var(--sp-2xl) 0;
+    }
+    .rhm-flow-wrap img {
+      width: 100%;
+      max-width: 1080px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      padding: 0 var(--sp-xl);
+      box-sizing: border-box;
+    }
+
+    /* Insight block */
+    .rhm-insight {
+      background: #b05c3a;
+      color: #fff;
+      padding: var(--sp-3xl) var(--sp-xl);
+      text-align: center;
+    }
+    .rhm-insight p {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .rhm-insight em {
+      font-style: normal;
+      opacity: 0.7;
+      font-size: 0.8em;
+      display: block;
+      margin-top: var(--sp-sm);
+      font-weight: 400;
+    }
+
+    /* User persona row */
+    .rhm-persona-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-xl);
+      margin-top: var(--sp-2xl);
+    }
+    @media (max-width: 640px) {
+      .rhm-persona-grid { grid-template-columns: 1fr; }
+    }
+    .rhm-persona {
+      border: 1.5px solid #e8ddd6;
+      border-radius: 2px;
+      padding: var(--sp-xl);
+    }
+    .rhm-persona-age {
+      display: inline-block;
+      background: #b05c3a;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: var(--sp-sm);
+    }
+    .rhm-persona p {
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #555;
+    }
+    .rhm-persona p + p { margin-top: var(--sp-sm); }
+    .rhm-persona strong { color: #1a1a1a; }
+  </style>
+</head>
+<body>
+
+<div class="loader" aria-hidden="true"><div class="loader-mark"></div></div>
+<div class="cursor" aria-hidden="true"></div>
+
+<header class="site-header" id="header">
+  <a class="brand" href="../index.html" aria-label="半熟漢堡">
+    <img src="../橫式商標.svg" alt="半熟漢堡 Half Humble" class="brand-logo" height="32">
+  </a>
+  <nav class="nav" aria-label="主導航">
+    <a class="is-active" href="../work.html">Work</a>
+    <a href="../service.html">Service</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </nav>
+  <div class="header-right">
+    <button class="lang-toggle" type="button" data-lang-toggle aria-label="切換語言 / Switch language"><span data-i18n="zh">EN</span><span data-i18n="en">中文</span></button>
+    <a class="header-cta" href="../contact.html" data-magnet><span class="dot"></span> start a project</a>
+  </div>
+</header>
+
+<div class="site-utility" aria-hidden="true">
+  <span class="util-left">
+    <span>Designer · Brand Identity / System / Space</span>
+    <span>Taichung · UTC+8</span>
+  </span>
+  <span class="util-right">
+    <a href="mailto:hello.halfhumble@gmail.com">hello.halfhumble@gmail.com</a>
+    <span>(0)(4) services · (2)(7) cases</span>
+  </span>
+</div>
+
+<!-- ========== Module 1 — Hero ========== -->
+<figure class="case-fullbleed case-fullbleed-hero" aria-hidden="true">
+  <div class="case-fullbleed-img is-tall" style="padding:0;background:#fff;aspect-ratio:auto;">
+    <img src="../images/works/reef-heart-moment/B%E7%B5%84%20-%20%E5%88%86%E4%BA%AB%E6%9C%83%E5%B1%95%E7%89%88_1-02.jpg"
+         alt="礁心時刻 分享會展板"
+         style="width:100%;height:auto;display:block;">
+  </div>
+</figure>
+
+<!-- ========== Module 2 — Hero Text ========== -->
+<section class="cs-hero">
+  <div class="cs-container">
+    <span class="cs-kicker">Case 18 / 24</span>
+    <h1 class="cs-hero-title">礁心時刻<span class="cs-hero-title-en">Open Heart Time, Jiaoxi</span></h1>
+    <div class="cs-hero-grid">
+      <div class="cs-hero-info">
+        <span><b>T</b><em>Service Design, Visual System</em></span>
+        <span><b>P</b><em>Internship — 宜居實習生</em></span>
+        <span><b>D</b><em>Hanpo Chen (組員)</em></span>
+        <span><b>Y</b><em>2021</em></span>
+        <span class="gap" aria-hidden="true"></span>
+        <span><b>類別</b><em>服務設計 · 主視覺</em></span>
+        <span><b>專案性質</b><em>實習專案</em></span>
+        <span><b>角色</b><em>陳翰博（組員）</em></span>
+        <span><b>年份</b><em>2021</em></span>
+      </div>
+      <p class="cs-hero-en" data-i18n="en">Reef Heart Moment (礁心時刻) is a cross-generational service design project connecting elderly residents aged 60–70 with children aged 7–12 in Jiaoxi, Yilan. Through a layered task system — 郊遊去、大家來灶鼓、小小藝術家、全能表演家 — both generations accumulate shared memories in a handmade 時光寶盒 (Memory Box). The project encompasses brand identity, key visual design, packaging, and the interactive task module system.</p>
+      <p class="cs-hero-zh" data-i18n="zh">礁心時刻是一個跨世代青銀共好的服務設計專案，以宜蘭礁溪為場域，串聯在地60–70歲年長者與7–12歲孩童。透過多層次任務模組——郊遊去、大家來灶鼓、小小藝術家、全能表演家——引導兩代人在同一個任務裡積累默契、找到對話的理由。成果收藏於共同製作的時光寶盒中，每月聚會時一起取出分享。本專案涵蓋品牌主視覺、包裝設計與互動任務模組系統。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Module 3 — Problem ========== -->
+<section class="cs-section cs-problem">
+  <div class="cs-container cs-problem-body">
+    <span class="cs-kicker">01 — Problem</span>
+    <h2 class="cs-h2">
+      <span data-i18n="zh">年長者想靠近，卻不知道怎麼開始</span>
+      <span data-i18n="en">Elders Want to Connect, But Don't Know How to Start</span>
+    </h2>
+    <h3 class="cs-h3">
+      <span data-i18n="zh">對於礁溪在地60–70歲的年長者來說，與年輕世代的互動是一大問題。</span>
+      <span data-i18n="en">For local residents aged 60–70 in Jiaoxi, meaningful interaction with younger generations is a persistent challenge.</span>
+    </h3>
+  </div>
+
+  <div class="rhm-container">
+    <div class="rhm-problem-grid">
+      <div class="rhm-problem-card">
+        <span class="rhm-problem-num">01</span>
+        <h4>不知從何開始</h4>
+        <p>長輩大多想與年輕世代有更多交流，但往往找不到切入點，邀約也不知道提什麼。</p>
+      </div>
+      <div class="rhm-problem-card">
+        <span class="rhm-problem-num">02</span>
+        <h4>負面經驗累積下，寧願自己找同好</h4>
+        <p>長輩主動邀約出遊，但青年興致缺缺，幾次下來選擇放棄，改為自己找同年齡的朋友。</p>
+      </div>
+      <div class="rhm-problem-card">
+        <span class="rhm-problem-num">03</span>
+        <h4>空閒時間難相配合</h4>
+        <p>長輩時間較為充裕；青年的空閒時間則相對零碎，難以配合固定聚會。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Insight banner ========== -->
+<div class="rhm-insight">
+  <p>透過多層次的任務，打造跨代互動的高質感時光。<em>Through layered tasks, craft quality moments where generations genuinely meet.</em></p>
+</div>
+
+<!-- ========== Module 4 — Design Concept ========== -->
+<section class="rhm-section">
+  <div class="rhm-container">
+    <span class="cs-kicker">02 — Design Concept</span>
+    <h2 class="cs-h2">
+      <span data-i18n="zh">四類任務 × 三種難度，讓互動從家出發走向社區</span>
+      <span data-i18n="en">Four Task Types × Three Difficulty Levels — from Home to Community</span>
+    </h2>
+    <p class="cs-text" data-i18n="zh">礁心時刻設計一系列任務模組，涵蓋初、中、高三種難度，青銀能自由選擇適合的任務執行。如一同探索礁溪秘境、裝飾家裡的角落、為對方搭配一套衣服等，藉此累積彼此的默契，並引導青銀逐步從家庭走向社區。</p>
+    <p class="cs-text" data-i18n="en">The task library spans three difficulty levels. Young and old participants freely choose missions together — exploring hidden Jiaoxi spots, decorating a corner of the home, styling an outfit for each other — gradually building trust and moving from family to community.</p>
+
+    <div class="rhm-tasks">
+      <div class="rhm-task-item">
+        <span class="rhm-task-num">①</span>
+        <span class="rhm-task-name">郊遊去</span>
+        <span class="rhm-task-desc">一起出門探索礁溪秘境與街坊景點</span>
+      </div>
+      <div class="rhm-task-item">
+        <span class="rhm-task-num">②</span>
+        <span class="rhm-task-name">大家來灶鼓</span>
+        <span class="rhm-task-desc">在廚房一起做菜、分享家傳食譜</span>
+      </div>
+      <div class="rhm-task-item">
+        <span class="rhm-task-num">③</span>
+        <span class="rhm-task-name">小小藝術家</span>
+        <span class="rhm-task-desc">一起製作或裝飾，留下共同的作品</span>
+      </div>
+      <div class="rhm-task-item">
+        <span class="rhm-task-num">④</span>
+        <span class="rhm-task-name">全能表演家</span>
+        <span class="rhm-task-desc">為對方表演、一起唱歌或現場創作</span>
+      </div>
+    </div>
+
+    <div class="rhm-difficulty">
+      <span class="rhm-diff-label">DIFFICULTY</span>
+      <span class="rhm-diff-tag easy">初 · Beginner</span>
+      <span class="rhm-diff-tag mid">中 · Intermediate</span>
+      <span class="rhm-diff-tag hard">高 · Advanced</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Module 5 — Personas ========== -->
+<section class="rhm-section" style="padding-top:0;">
+  <div class="rhm-container">
+    <span class="cs-kicker">03 — Who We Design For</span>
+    <h2 class="cs-h2">
+      <span data-i18n="zh">兩個世代，兩種需求，一個共同的任務</span>
+      <span data-i18n="en">Two Generations, Two Needs, One Shared Task</span>
+    </h2>
+
+    <div class="rhm-persona-grid">
+      <div class="rhm-persona">
+        <span class="rhm-persona-age">60–70 歲</span>
+                <p><strong>時間較充裕，會參與長老教會或社區活動的年長者。</strong></p>
+        <p>需要跟年輕世代建立更多交流、強化連結——因為對他們來說，維繫身心健康、避免失能很重要。</p>
+      </div>
+      <div class="rhm-persona">
+        <span class="rhm-persona-age">7–12 歲</span>
+        <p><strong>參與礁溪長老教會小衛星計畫的孩童。</strong></p>
+        <p>需要有大人能夠傾聽、分享自己的日常——因為對他們來說，感受到家的歸屬感很重要。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Module 6 — Service Flow ========== -->
+<div class="rhm-flow-wrap">
+  <img src="../images/works/reef-heart-moment/%E5%AE%9C%E5%B1%85ICON%E5%AE%8C.png"
+       alt="礁心時刻服務流程圖——到場說明時與回去執行時的任務循環">
+</div>
+
+<!-- ========== Module 7 — Roadmap ========== -->
+<section class="rhm-section">
+  <div class="rhm-container">
+    <span class="cs-kicker">04 — Short / Mid / Long Term</span>
+    <h2 class="cs-h2">
+      <span data-i18n="zh">如何讓青銀的互動更自然、有生活感與地方感？</span>
+      <span data-i18n="en">How to Make Intergenerational Interaction Feel Natural, Lived-In, and Local?</span>
+    </h2>
+    <div class="rhm-roadmap">
+      <div class="rhm-phase">
+        <span class="rhm-phase-label">短期 · Short</span>
+        <h4>在家庭建立彼此的信賴感</h4>
+        <p>透過日常任務積累默契，為往後親子聚會、社區上課打下人際基礎。</p>
+      </div>
+      <div class="rhm-phase">
+        <span class="rhm-phase-label">中期 · Mid</span>
+        <h4>探索日常生活圈之外</h4>
+        <p>拓展到街坊景點，為現有教會或社區課程加值，讓互動走出家門。</p>
+      </div>
+      <div class="rhm-phase">
+        <span class="rhm-phase-label">長期 · Long</span>
+        <h4>深根宜蘭在地文化</h4>
+        <p>探索宜蘭在地技藝，學習傳統文化與歷史，讓世代共好成為地方底蘊的一部分。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Module 8 — 時光寶盒 Packaging ========== -->
+<section class="rhm-section" style="padding:0;">
+  <div class="rhm-container" style="padding-top:var(--sp-4xl);padding-bottom:var(--sp-xl);">
+    <span class="cs-kicker">05 — 時光寶盒 Memory Box</span>
+    <h2 class="cs-h2">
+      <span data-i18n="zh">任務結果的載體，也是每月聚會的儀式感</span>
+      <span data-i18n="en">A Container for Memories — and a Monthly Ritual</span>
+    </h2>
+    <p class="cs-text" data-i18n="zh">說明會時青銀一同繪製時光寶盒，作為往後任務成果的乘載容器。每月結算時取出內容物，票選最佳拍檔、兌換獎勵，並招募下一階段的參與者。</p>
+    <p class="cs-text" data-i18n="en">At the introductory session, participants co-design their Memory Box — then use it to collect task results throughout the month. At the monthly gathering, they share what's inside, vote for best partners, redeem rewards, and invite new members.</p>
+  </div>
+  <div class="rhm-box-grid">
+    <img src="../images/works/reef-heart-moment/%E5%8C%85%E8%A3%9D/Mailer_Box_Mockup_2.png" alt="礁心時刻時光寶盒包裝">
+    <img src="../images/works/reef-heart-moment/%E5%8C%85%E8%A3%9D/Mailer_Box_Mockup_3.png" alt="礁心時刻時光寶盒包裝側面">
+    <img src="../images/works/reef-heart-moment/%E5%8C%85%E8%A3%9D/Mailer_Box_Mockup_4.png" alt="礁心時刻時光寶盒包裝展開">
+  </div>
+</section>
+
+<!-- ========== Module 9 — 錦囊 ========== -->
+<section class="rhm-section" style="padding:0;">
+  <div class="rhm-container" style="padding-top:var(--sp-4xl);padding-bottom:var(--sp-xl);">
+    <span class="cs-kicker">06 — 錦囊 Task Pouch</span>
+    <h2 class="cs-h2">
+      <span data-i18n="zh">任務卡的儀式感容器</span>
+      <span data-i18n="en">The Pouch That Makes Each Task Feel Like an Event</span>
+    </h2>
+    <p class="cs-text" data-i18n="zh">礁心時刻的任務卡裝在繡有「無聊」二字的錦囊袋中——每次取出任務，都像是打開一個小小的期待。標語反諷而溫柔，暗示每一次的「無聊」都可以是兩代人共同的開始。</p>
+    <p class="cs-text" data-i18n="en">Task cards are stored in a drawstring pouch embroidered with "無聊" (boredom) — because every boring moment is a chance to begin something together. The ironic slogan gently suggests that even idleness can become the starting point for intergenerational connection.</p>
+  </div>
+  <div class="rhm-jinnang-grid">
+    <img src="../images/works/reef-heart-moment/%E5%8C%85%E8%A3%9D/%E9%8C%A6%E5%9B%8A.png" alt="礁心時刻錦囊袋">
+    <img src="../images/works/reef-heart-moment/%E5%8C%85%E8%A3%9D/%E9%8C%A6%E5%9B%8A02.png" alt="礁心時刻錦囊袋 02">
+    <img src="../images/works/reef-heart-moment/%E5%8C%85%E8%A3%9D/%E9%8C%A6%E5%9B%8A03.png" alt="礁心時刻錦囊袋 03">
+  </div>
+</section>
+
+<!-- ========== Module 10 — Summary / Credits ========== -->
+<section class="cs-summary rhm-section">
+  <div class="rhm-container">
+    <span class="cs-kicker">07 — Reflection</span>
+    <h2 class="cs-h2">
+      <span data-i18n="zh">青銀互動不是噱頭，是讓兩代人在同一個任務裡找到對話的理由</span>
+      <span data-i18n="en">Intergenerational interaction isn't a gimmick — it's about giving two generations a real reason to share the same task</span>
+    </h2>
+    <p class="cs-text" data-i18n="zh">礁心時刻最核心的設計決策，是不把青銀互動設計成「活動」，而是讓它成為日常習慣的一部分。任務不強迫，難度可選擇，時光寶盒讓成果有地方放——整套系統讓參與的動機從外部驅動，慢慢轉移到兩代人彼此期待的那個時刻本身。</p>
+    <p class="cs-text" data-i18n="en">The core design decision was not to frame intergenerational interaction as an "event," but to let it become part of everyday rhythm. Tasks are optional, difficulty is chosen, and the Memory Box gives results a place to land. The system gradually shifts motivation from external prompting to the moment itself — the one both generations start to look forward to.</p>
+    <div style="margin-top:var(--sp-3xl);">
+      <span class="cs-kicker">Team</span>
+      <div class="rhm-credits">
+        <dl><dt>引導師</dt><dd>黃建圖<br><em style="font-size:0.8em;color:#999;">「海波浪」創辦人</em></dd></dl>
+        <dl><dt>老師</dt><dd>石乃丰</dd></dl>
+        <dl><dt>組長</dt><dd>謝沛馨</dd></dl>
+        <dl><dt>組員</dt><dd>李孟融</dd></dl>
+        <dl><dt>組員</dt><dd>陳翰博</dd></dl>
+        <dl><dt>組員</dt><dd>林昕潔</dd></dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 上下案例切換 ========== -->
+<section class="next-case wrap">
+  <div class="next-meta">Next case · 19 / 24</div>
+  <a href="gongping-christmas.html" data-cursor-text="next">
+    <span class="title">公平里｜就很公平聖誕節 親子互動海報設計</span>
+    <span class="arrow">→</span>
+  </a>
+</section>
+
+<section class="enquiry">
+  <div class="wrap">
+    <h2>有相似的<em>挑戰</em>？<br>聊聊看。</h2>
+    <div class="enquiry-detail">
+      <div class="enquiry-block">
+        <span class="lbl">For enquiries</span>
+        <span class="val"><a href="mailto:hello.halfhumble@gmail.com" data-magnet>hello.halfhumble@gmail.com</a></span>
+      </div>
+      <a class="btn-parens is-light" href="../contact.html" data-magnet data-cursor-text="start" style="margin-top:24px;">start a project</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span>© 2026 陳翰博 / 半熟漢堡 Half Humble</span>
+  <span class="col-c">Built layer by layer in Taichung, Taiwan.</span>
+  <span class="col-r"><span class="links"><a href="../contact.html">Contact</a></span></span>
+</footer>
+
+<script src="../main.js"></script>
+</body>
+</html>

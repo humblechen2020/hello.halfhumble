@@ -1,0 +1,16 @@
+# tspem 圖片資料夾說明
+
+已套用資料夾內的真實設計稿，直接在 tspem.html 與 work.html 中套用：
+
+2020.png — 2020年年會主視覺「凝聚 團結 守護 希望」→ Module 3 Strategy 區塊
+2021.png — 2021年「新冠肺炎後疫情時代 兒童急診挑戰」主視覺 → Module 2 Problem 區塊
+2022.png — 2021年兒少保護專題研討會「齊心合力 編織兒少安全網」主視覺 → Module 4 Design Details 區塊一
+台灣兒童急診醫學會logo_環型字.jpg — 學會圓形徽章 → Module 3 Strategy 側邊 sticky 圖
+2024/Poster_Frame_Mockup.png — 2024年會場指標輸出 mockup → Module 4 Design Details 區塊一
+2024/Soft_Cover_Book_Mockup_v01.png — 2024年雙封面手冊「演講講義」（藍色）→ Module 3 Strategy 小圖
+2024/Soft_Cover_Book_Mockup_v02.png — 2024年「會員大會手冊」（橘色）→ Module 4 Design Details 區塊二
+2025/Soft_Cover_Book_Mockup_v01.png — 2025年「演講講義」（藍紫色）→ Hero 主視覺、work.html 卡片、Conclusion 畫廊
+2025/Soft_Cover_Book_Mockup_v02.png — 2025年「會員大會手冊」（粉色）→ Module 4 Design Details 區塊二
+2025/enhanced_0_1.png — 2025年會海報立牌實際上牆照 → Module 4 Design Details 區塊三、Conclusion 畫廊
+
+若之後有更高解析度或更多年度的素材，可直接補進對應的年度子資料夾，再告訴 Claude 套用。

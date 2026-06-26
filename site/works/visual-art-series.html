@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover">
+  <title>根光 Rooted Light｜視覺藝術影像 — 半熟漢堡</title>
+  <meta name="description" content="以梵谷後印象派色彩哲學為骨架，透過四個情感章節——萌醒、生長、徬徨、接納——探索人一生意識的流動。沉浸式雙螢幕投影影像裝置。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=TASA+Orbiter:ital,wght@0,400;0,500;0,700;0,900;1,700;1,900&family=TASA+Orbiter+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* ── Root Light 專用 ───────────────────────────── */
+    .rl-video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #0a0a0a;
+    }
+    .rl-video-wrap iframe,
+    .rl-video-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    /* 章節色帶 */
+    .rl-chapter {
+      border-left: 3px solid var(--ink-muted);
+      padding-left: clamp(16px, 2vw, 24px);
+      margin: clamp(32px, 4vw, 48px) 0;
+    }
+    .rl-chapter-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .rl-chapter-title {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 12px;
+    }
+    .rl-chapter-title em {
+      font-style: normal;
+      font-weight: 400;
+      color: var(--ink-muted);
+      font-size: 0.75em;
+      margin-left: 0.5em;
+    }
+
+    /* 影片 + 靜圖並排 */
+    .rl-media-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin: clamp(16px, 2vw, 24px) 0;
+    }
+    @media (max-width: 600px) {
+      .rl-media-pair { grid-template-columns: 1fr; }
+    }
+    .rl-media-pair > * {
+      width: 100%;
+      display: block;
+    }
+    .rl-media-pair img,
+    .rl-media-pair video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      aspect-ratio: 16/9;
+    }
+
+    /* 全寬影片 */
+    .rl-video-full {
+      margin: 2px 0;
+    }
+    .rl-video-full video {
+      width: 100%;
+      display: block;
+    }
+
+    /* Credits */
+    .rl-credits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: clamp(12px, 2vw, 20px);
+      margin-top: clamp(24px, 3vw, 40px);
+      padding-top: clamp(24px, 3vw, 40px);
+      border-top: 1px solid var(--ink-muted);
+    }
+    .rl-credits dt {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+    .rl-credits dd {
+      font-size: clamp(0.85rem, 1.2vw, 1rem);
+      margin: 0 0 16px;
+    }
+    .rl-credits dd a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* 詩句引言 */
+    .rl-verse {
+      font-style: italic;
+      line-height: 1.9;
+      color: var(--ink-muted);
+      font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+      border-left: 2px solid var(--ink-muted);
+      padding-left: clamp(12px, 1.5vw, 20px);
+      margin: clamp(16px, 2vw, 24px) 0;
+    }
+
+    /* 展場照片 */
+    .rl-venue-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin: 2px 0;
+    }
+    @media (max-width: 600px) {
+      .rl-venue-pair { grid-template-columns: 1fr; }
+    }
+    .rl-venue-pair img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+    .rl-venue-full img,
+    .rl-venue-full video {
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="loader" aria-hidden="true"><div class="loader-mark"></div></div>
+<div class="cursor" aria-hidden="true"></div>
+
+<header class="site-header" id="header">
+  <a class="brand" href="../index.html" aria-label="半熟漢堡">
+    <img src="../橫式商標.svg" alt="半熟漢堡 Half Humble" class="brand-logo" height="32">
+  </a>
+  <nav class="nav" aria-label="主導航">
+    <a class="is-active" href="../work.html">Work</a>
+    <a href="../service.html">Service</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+  </nav>
+  <div class="header-right">
+    <button class="lang-toggle" type="button" data-lang-toggle aria-label="切換語言 / Switch language"><span data-i18n="zh">EN</span><span data-i18n="en">中文</span></button>
+    <a class="header-cta" href="../contact.html" data-magnet><span class="dot"></span> start a project</a>
+  </div>
+</header>
+
+<div class="site-utility" aria-hidden="true">
+  <span class="util-left">
+    <span>Designer · Brand Identity / System / Space</span>
+    <span>Taichung · UTC+8</span>
+  </span>
+  <span class="util-right">
+    <a href="mailto:hello.halfhumble@gmail.com">hello.halfhumble@gmail.com</a>
+    <span>(0)(4) services · (2)(7) cases</span>
+  </span>
+</div>
+
+<!-- ========== Module 1 — Hero（展場實景）========== -->
+<figure class="case-fullbleed case-fullbleed-hero" aria-hidden="true">
+  <div class="case-fullbleed-img is-tall" style="padding:0;background:#0a0a0a;aspect-ratio:auto;">
+    <img src="../images/works/visual-art-series/%E5%AF%A6%E9%AB%94%E5%B1%95%E5%A0%B4%E7%85%A7/072E0071-DB3C-40EC-9E1F-4C31AFFEAE2E.jpg"
+         alt="根光 Rooted Light 實體展場 — 雙螢幕沉浸式投影"
+         style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+</figure>
+
+<!-- ========== Module 2 — Hero Text ========== -->
+<section class="cs-hero">
+  <div class="cs-container">
+    <span class="cs-kicker">Case L02 / 15</span>
+    <h1 class="cs-hero-title">根光<span class="cs-hero-title-en">Rooted Light</span></h1>
+    <div class="cs-hero-grid">
+      <div class="cs-hero-info">
+        <span><b>T</b><em>Video Art, Installation</em></span>
+        <span><b>P</b><em>Lab · Self-initiated</em></span>
+        <span><b>D</b><em>Hanpo Chen</em></span>
+        <span><b>Y</b><em>2024</em></span>
+        <span class="gap" aria-hidden="true"></span>
+        <span><b>類別</b><em>影像裝置藝術</em></span>
+        <span><b>專案性質</b><em>自主創作</em></span>
+        <span><b>設計</b><em>陳翰博</em></span>
+        <span><b>年份</b><em>2024</em></span>
+      </div>
+      <p class="cs-hero-en" data-i18n="en">A visual journey through growth, tension, and release. Rooted Light unfolds across four emotional chapters — Awakening, Growth, Wavering, Embrace — using post-impressionist color philosophy, immersive dual-screen projection, and the tension between painted image and photographic reality to trace one consciousness across an entire life.</p>
+      <p class="cs-hero-zh" data-i18n="zh">以梵谷後印象派的色彩哲學為骨架，透過沉浸式雙螢幕投影，交織寫實影像與心靈系大地景觀，探索人的一生意識——萌醒、生長、徬徨、接納。影像如筆觸堆疊，回應生命光影與情感的輪迴流動。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Module 3 — YouTube 完整影片（第二框）========== -->
+<section class="cs-section cs-problem">
+  <figure class="case-fullbleed">
+    <div class="rl-video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/xU4fUpRcvO4?rel=0&color=white"
+        title="根光 Rooted Light — Full Film"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </figure>
+  <div class="cs-container cs-problem-body">
+    <span class="cs-kicker">02 — Full Film</span>
+    <h2 class="cs-h2"><span data-i18n="zh">觀看完整作品</span><span data-i18n="en">Watch the Full Film</span></h2>
+    <h3 class="cs-h3"><span data-i18n="zh">從新生到落幕，這是一場由內而外的情感遷徙。</span><span data-i18n="en">From rebirth to farewell, this is an inward migration of emotion.</span></h3>
+    <p class="cs-text" data-i18n="zh">影像、聲音與意象，層層交疊，讓身體成為光與根之間的容器。本作於學學文創一樓拉門以雙螢幕沉浸式投影方式呈現，左右各寬350cm、高318cm，大多時候同時投影不一樣的方形畫面，少數畫面會一起投成長方形畫面。另有半透明的畫面C不定時飄移於AB之中。</p>
+    <p class="cs-text" data-i18n="en">Visuals, sounds, and metaphors intertwine — the body becomes a vessel between light and root. The work was presented as an immersive dual-screen projection at Xuexue Institute's ground-floor sliding doors, each screen 350cm wide × 318cm tall. Most of the time the two screens show different square compositions; occasionally they merge into a single widescreen image, while a semi-transparent overlay drifts unpredictably between them.</p>
+  </div>
+</section>
+
+<!-- ========== Module 4 — Concept（梵谷色彩哲學 × 四章節）========== -->
+<section class="cs-section">
+  <div class="cs-container cs-strategy-layout">
+    <div class="cs-strategy-sticky">
+      <div class="case-fullbleed-img" style="padding:0;background:#0a0a0a;aspect-ratio:4/5;overflow:hidden;">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/4556.webp"
+          alt="梵谷後印象派風格 · 章節二 生長"
+          style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
+    </div>
+    <div class="cs-strategy-main">
+      <div>
+        <span class="cs-kicker">03 — Concept</span>
+        <h2 class="cs-h2"><span data-i18n="zh">梵谷色彩哲學 × 人生意識的四個章節</span><span data-i18n="en">Van Gogh's Color Philosophy × Four Chapters of Consciousness</span></h2>
+      </div>
+
+      <p class="cs-text" data-i18n="zh">靈感取自梵谷的〈向日葵〉——大量高彩度的黃色與橘色，標誌性的短促、快速且充滿力量的筆觸。在《根光》中，我們借鑑梵谷的色彩哲學，用這種充滿能量的筆觸描繪「根」的生長與「光」的爆發，以表達情感階段的變化。</p>
+      <p class="cs-text" data-i18n="en">Inspired by Van Gogh's Sunflowers — high-chroma yellows and oranges, signature rapid and forceful brushstrokes. In Rooted Light, we borrow Van Gogh's color philosophy: those energy-charged marks trace the growth of roots and the eruption of light, carrying each emotional stage of transformation.</p>
+
+      <div class="rl-media-pair" style="margin:clamp(20px,2.5vw,32px) 0;">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/465.webp"
+          alt="章節一 萌醒 · Awakening">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/566.webp"
+          alt="章節一 萌醒 · 細節特寫">
+      </div>
+
+      <div>
+        <h3 class="cs-h3"><span data-i18n="zh">一二章後印象派筆觸，三四章走向光與攝影的實體</span><span data-i18n="en">Chapters 1–2: Post-impressionist paint. Chapters 3–4: Toward light and photographic reality.</span></h3>
+        <p class="cs-text" data-i18n="zh">影像如筆觸堆疊——一二章後梵谷印象派的繪畫元素較多，呈現土的元素（成長階段）；到後面越來越接近光，畫面也就越實體，更多的攝影素材（photo(光)graphic(描寫)）。寫實與幻象交錯，然後慢慢形成具體。</p>
+        <p class="cs-text" data-i18n="en">Images stack like brushstrokes. Chapters 1–2 lean heavily on post-impressionist painting — earth, soil, the growing stage. Toward the end, the frame moves closer to light, growing more physical, with more photographic material. Reality and illusion interweave, then slowly solidify.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Module 5 — 四章節詳細展示 ========== -->
+<section class="cs-section">
+  <div class="cs-container">
+    <span class="cs-kicker">04 — Four Chapters</span>
+    <h2 class="cs-h2"><span data-i18n="zh">章節拆解 · 從土壤到光</span><span data-i18n="en">Chapter by Chapter · From Earth to Light</span></h2>
+
+    <!-- 章節一：萌醒 Awakening -->
+    <div class="cs-details-block">
+      <div class="rl-chapter">
+        <span class="rl-chapter-label">Chapter 01 · 成長階段 · 暖黃 赭石 土褐</span>
+        <h3 class="rl-chapter-title">萌醒 <em>Awakening</em></h3>
+      </div>
+      <div class="rl-verse" data-i18n="zh">
+        沉睡於柔軟的土壤，裹著微光的薄衣。<br>
+        無數初生的靈魂，輕輕被喚醒，迎向晨曦——<br>
+        卻也觸碰真相的刺。
+      </div>
+      <div class="rl-verse" data-i18n="en">
+        Resting in the tender embrace of earth, cloaked in a delicate sheen of light.<br>
+        Countless nascent souls are softly roused, greeting the dawn—<br>
+        yet brushing against the thorns of truth.
+      </div>
+      <p class="cs-text" data-i18n="zh">從現實殘像展開：急促上班的腳步、社畜日常、魚池中無目的游動，象徵被困的精神狀態。隨著影像推進，畫面採後印象派筆觸，由泥土出發，逐步向光靠近。最後帶入尼采精神三變——駱駝的承受、獅子的對抗，最終化為嬰兒的重生。</p>
+      <p class="cs-text" data-i18n="en">Opening from the residual images of reality: the hurried steps of a commute, the daily grind, fish circling aimlessly in a pond — symbols of a trapped mental state. As the images advance, the frame adopts post-impressionist brushwork, starting from earth and gradually moving toward light. It concludes with Nietzsche's Three Metamorphoses — the endurance of the camel, the resistance of the lion, finally the rebirth of the infant.</p>
+      <div class="rl-video-full">
+        <video autoplay muted loop playsinline>
+          <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E8%90%8C%E9%86%92.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="rl-media-pair">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/465.webp"
+          alt="萌醒 · 黑白殘像">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/566.webp"
+          alt="萌醒 · 特寫細節">
+      </div>
+    </div>
+
+    <!-- 章節二：生長 Growth -->
+    <div class="cs-details-block">
+      <div class="rl-chapter">
+        <span class="rl-chapter-label">Chapter 02 · 張力階段 · 梵谷色彩 綠 藍 黃</span>
+        <h3 class="rl-chapter-title">生長 <em>Growth</em></h3>
+      </div>
+      <div class="rl-verse" data-i18n="zh">
+        追逐天際的輝芒，纖細的根鬚，<br>
+        蜿蜒、舒展，只為一瞬陽光的擁抱。<br>
+        在每一道裂縫中，織出屬於自己的溫柔光景。
+      </div>
+      <div class="rl-verse" data-i18n="en">
+        Chasing the glow of the horizon, slender roots twist and reach,<br>
+        yearning for a fleeting embrace of sunlight.<br>
+        In every crevice, they weave a gentle scene of their own.
+      </div>
+      <p class="cs-text" data-i18n="zh">開頭AB畫面同時呈現大橫幅的梵谷畫作風格樹根及大自然，後分割畫面為眼睛再進入漩渦圖案。瞳孔裡的表情符號指出情緒的變化與轉折——這是如青少年般的階段，渴望向光卻尚未穩定，越是努力生長，根便向下蔓延得更深。</p>
+      <p class="cs-text" data-i18n="en">Opening with both AB screens presenting a large panoramic image of Van Gogh-style tree roots and nature, then splitting into eyes and spiraling patterns. Emoji in the pupils signal emotional shifts — this is the adolescent stage: yearning for light but not yet stable; the harder the growth, the deeper the roots reach down.</p>
+      <div class="rl-video-full">
+        <video autoplay muted loop playsinline>
+          <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E7%94%9F%E9%95%B7.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="rl-media-pair">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/4556.webp" alt="生長 · 梵谷後印象派風格">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/46854.webp" alt="生長 · 抽象擴展意象">
+      </div>
+    </div>
+
+    <!-- 章節三：徬徨 Wavering -->
+    <div class="cs-details-block">
+      <div class="rl-chapter">
+        <span class="rl-chapter-label">Chapter 03 · 張力階段 · 枯黃 暗藍 陰影灰</span>
+        <h3 class="rl-chapter-title">徬徨 <em>Wavering</em></h3>
+      </div>
+      <div class="rl-verse" data-i18n="zh">
+        日復一日，於遺憾中踱步。<br>
+        風聲在耳畔低吟，無數目光凝視一場絢爛的舞臺，<br>
+        期待你的光芒萬丈，也靜待你的黯然隕落。
+      </div>
+      <div class="rl-verse" data-i18n="en">
+        Day after day, pacing through regret.<br>
+        The wind hums softly at the ear, countless gazes fixed on a radiant stage,<br>
+        awaiting your brilliance, and silently watching for your fall.
+      </div>
+      <p class="cs-text" data-i18n="zh">帶入更多具像畫面，引用許多電影或藝術的具象素材，展現情感的困擾。從微生物與瞳孔般的抽象，擴展為更具象的意象，象徵意識逐漸成形。伴隨而來的是情感的困擾與對他人眼光的敏感——有些是真實的注視，有些則是內心的投射與想像。</p>
+      <p class="cs-text" data-i18n="en">More figurative images enter — film references, art citations — depicting emotional turmoil. Abstract microbe-and-pupil forms expand into concrete imagery, symbolizing a consciousness solidifying. Alongside: emotional distress and sensitivity to others' gazes — some real, some projected from within.</p>
+      <div class="rl-video-full">
+        <video autoplay muted loop playsinline>
+          <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E5%BE%AC%E5%BE%A8.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="rl-media-pair">
+        <img src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/454.webp" alt="徬徨 · 飄落的人形">
+        <div class="rl-video-wrap" style="padding-top:0;aspect-ratio:16/9;position:relative;">
+          <video style="position:static;width:100%;height:auto;" autoplay muted loop playsinline>
+            <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/Sequence%2001.webm" type="video/webm">
+          </video>
+        </div>
+      </div>
+      <div class="rl-media-pair" style="margin-top:2px;">
+        <div class="rl-video-wrap" style="padding-top:0;position:relative;aspect-ratio:16/9;">
+          <video style="position:static;width:100%;height:auto;" autoplay muted loop playsinline>
+            <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E4%B8%89-%E5%9B%9B%E7%AB%A0%E8%BD%89%E5%A0%B401.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="rl-video-wrap" style="padding-top:0;position:relative;aspect-ratio:16/9;">
+          <video style="position:static;width:100%;height:auto;" autoplay muted loop playsinline>
+            <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E4%B8%89-%E5%9B%9B%E7%AB%A0%E8%BD%89%E5%A0%B402.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <p class="cs-text" style="margin-top:var(--sp-sm);" data-i18n="zh">↑ 三-四章轉場：AB雙螢幕同步畫面，引導情感從徬徨進入接納的過渡。</p>
+      <p class="cs-text" style="margin-top:var(--sp-sm);" data-i18n="en">↑ Ch3→4 Transition: A and B screens in sync, guiding the emotional shift from Wavering into Embrace.</p>
+    </div>
+
+    <!-- 章節四：接納 Embrace -->
+    <div class="cs-details-block">
+      <div class="rl-chapter">
+        <span class="rl-chapter-label">Chapter 04 · 掙扎釋放 · 金色 亮白 淺青</span>
+        <h3 class="rl-chapter-title">接納 <em>Embrace</em></h3>
+      </div>
+      <div class="rl-verse" data-i18n="zh">
+        枯槁的雙手，輕撫新生生命的脈動。<br>
+        最終篇章，以無聲的輝煌落幕。
+      </div>
+      <div class="rl-verse" data-i18n="en">
+        Withered hands cradle the pulse of new life.<br>
+        The final verse.
+      </div>
+      <p class="cs-text" data-i18n="zh">象徵生命歷程的圓滿與重生。此階段主角已成熟，擁有孕育新種子的能力，外在堅定而溫柔，內心卻回到如嬰兒般最純淨、最安心的狀態。影像風格以溫暖的光波、緩慢的手勢與碎片化的記憶重組構成，營造出包覆、撫慰與釋懷的氛圍。</p>
+      <p class="cs-text" data-i18n="en">Symbolizing the fullness and rebirth of a life's journey. The protagonist is now mature, capable of nurturing new seeds — outwardly steadfast and gentle, inwardly returned to the purest, most secure infant state. The visual style is built from warm light waves, slow gestures, and fragmented memories reassembling.</p>
+      <div class="rl-video-full">
+        <video autoplay muted loop playsinline>
+          <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E6%8E%A5%E7%B4%8D.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Module 6 — 實體展場 ========== -->
+<section class="cs-section">
+  <div class="cs-container">
+    <span class="cs-kicker">05 — Exhibition · 學學文創一樓拉門</span>
+    <h2 class="cs-h2"><span data-i18n="zh">雙螢幕沉浸式投影 · 350cm × 318cm × 2</span><span data-i18n="en">Dual-Screen Immersive Projection · 350cm × 318cm × 2</span></h2>
+    <p class="cs-text" data-i18n="zh">展出場域為學學文創一樓拉門空間，左右各一面牆作為獨立投影面。觀者可自由移動於兩面屏幕之間，成為影像的一部分——其輪廓被光影吞沒，身體即是容器，光與根在此流動穿越。</p>
+    <p class="cs-text" data-i18n="en">The exhibition space was the sliding-door wall at Xuexue Institute's ground floor. Viewers moved freely between the two projection surfaces — silhouettes absorbed by light and shadow, the body becoming a vessel through which root and light pass.</p>
+  </div>
+  <div class="rl-venue-full" style="margin-top:var(--sp-lg);">
+    <img src="../images/works/visual-art-series/%E5%AF%A6%E9%AB%94%E5%B1%95%E5%A0%B4%E7%85%A7/7FDFCAD6-1D24-41D7-81F9-44BE7923FBB0.jpg"
+         alt="根光 實體展場 — 觀者輪廓與根系投影">
+  </div>
+  <div class="rl-venue-pair" style="margin-top:2px;">
+    <img src="../images/works/visual-art-series/%E5%AF%A6%E9%AB%94%E5%B1%95%E5%A0%B4%E7%85%A7/D16ED79E-ED07-4FFC-BF36-BE03948DBBFC.jpg"
+         alt="根光 實體展場 — 舞廳場景投影">
+    <img src="../images/works/visual-art-series/%E5%AF%A6%E9%AB%94%E5%B1%95%E5%A0%B4%E7%85%A7/IMG_7962.webp"
+         alt="根光 展場現場動態" style="aspect-ratio:4/3;object-fit:cover;width:100%;display:block;">
+  </div>
+</section>
+
+<!-- ========== Module 7 — Conclusion + Credits ========== -->
+<section class="cs-section">
+  <div class="cs-container cs-conclusion-body">
+    <span class="cs-kicker">06 — Conclusion</span>
+    <h2 class="cs-h2"><span data-i18n="zh">從新生到落幕，這是一場由內而外的情感遷徙</span><span data-i18n="en">From Rebirth to Farewell, an Inward Migration of Emotion</span></h2>
+    <p class="cs-text" data-i18n="zh">影像、聲音與意象，層層交疊，讓身體成為光與根之間的容器。《根光》不是一個關於答案的作品，而是一個關於行走的作品——沿著情感的路徑，在每一個章節停留，然後繼續前進。</p>
+    <p class="cs-text" data-i18n="en">Visuals, sounds, and metaphors intertwine — the body becomes a vessel between light and root. Rooted Light is not a work about answers. It is a work about walking — staying in each emotional chapter, then moving on.</p>
+
+    <h3 class="cs-h3" style="margin-top:var(--sp-2xl);margin-bottom:0;"><span data-i18n="zh">Credits / 作者介紹</span><span data-i18n="en">Credits</span></h3>
+    <dl class="rl-credits">
+      <div><dt>Director</dt><dd>Chen Humble 翰博</dd></div>
+      <div><dt>3D Animation</dt><dd>Zirong Wang 子榮<br><a href="https://www.instagram.com/oscar.w_official/" target="_blank" rel="noopener">@oscar.w_official</a></dd></div>
+      <div><dt>2D Animation</dt><dd>Chen Humble 翰博</dd></div>
+      <div><dt>Dubber</dt><dd>Chen Humble 翰博</dd></div>
+      <div><dt>Project Management</dt><dd>Peichun Lai 佩君</dd></div>
+      <div><dt>Poetic Adaptation</dt><dd>詩句改編 Plutoooo1222<br>原創服飾<br><em>《The Poet's Woven Sunshine｜編太陽的詩人》</em></dd></div>
+      <div><dt>Venue</dt><dd>學學文創一樓拉門<br>雙螢幕沉浸式投影<br>350cm × 318cm × 2</dd></div>
+    </dl>
+  </div>
+
+  <!-- 連續滿版影片序列 -->
+  <div class="cs-fullbleed-sequence" style="margin-top:var(--sp-2xl);">
+    <figure class="case-fullbleed">
+      <div class="case-fullbleed-img" style="padding:0;background:#0a0a0a;aspect-ratio:auto;">
+        <video style="width:100%;display:block;" autoplay muted loop playsinline>
+          <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E5%BE%AC%E5%BE%A8.mp4" type="video/mp4">
+        </video>
+      </div>
+    </figure>
+    <figure class="case-fullbleed">
+      <div class="case-fullbleed-img" style="padding:0;background:#0a0a0a;aspect-ratio:auto;">
+        <video style="width:100%;display:block;" autoplay muted loop playsinline>
+          <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E4%B8%89-%E5%9B%9B%E7%AB%A0%E8%BD%89%E5%A0%B402.mp4" type="video/mp4">
+        </video>
+      </div>
+    </figure>
+    <figure class="case-fullbleed">
+      <div class="case-fullbleed-img" style="padding:0;background:#0a0a0a;aspect-ratio:auto;">
+        <video style="width:100%;display:block;" autoplay muted loop playsinline>
+          <source src="../images/works/visual-art-series/%E7%95%AB%E9%9D%A2%E6%93%B7%E5%8F%96/%E6%8E%A5%E7%B4%8D.mp4" type="video/mp4">
+        </video>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ========== Module 8 — Summary ========== -->
+<section class="cs-summary">
+  <div class="cs-container cs-summary-grid">
+    <h2 class="cs-summary-title">重點回顧<br>Key Points</h2>
+    <ul>
+      <li data-i18n="zh"><b>後印象派色彩系統：</b>借鑑梵谷的對比色哲學，以顏色溫度標記每個情感階段的轉折，暖黃 → 枯黃暗藍 → 金色亮白。</li>
+      <li data-i18n="en"><b>Post-impressionist color system:</b> Van Gogh's contrasting color philosophy marks each emotional stage's shift — warm yellow → withered yellow / dark blue → gold and bright white.</li>
+      <li data-i18n="zh"><b>繪畫到攝影的連續體：</b>前兩章以筆觸質感呈現泥土與根，後兩章轉向光的寫實攝影，象徵意識從夢境走向現實。</li>
+      <li data-i18n="en"><b>Painting-to-photography continuum:</b> the first two chapters present earth and root through brushwork texture; the last two shift toward photographic reality of light — consciousness moving from dream to the real.</li>
+      <li data-i18n="zh"><b>雙螢幕沉浸投影：</b>AB兩屏各自獨立，時而合而為一的大橫幅；另有半透明層C飄移其中，三個維度的畫面構建出一個立體的情感場域。</li>
+      <li data-i18n="en"><b>Dual-screen immersive projection:</b> screens A and B operate independently, occasionally merging into a single panorama; a semi-transparent layer C drifts between them — three visual dimensions building a three-dimensional emotional field.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="next-case wrap">
+  <div class="next-meta">Next case · L03 / 15</div>
+  <a href="typography-experiment.html" data-cursor-text="next">
+    <span class="title">字體設計實驗｜筆畫之間的留白</span>
+    <span class="arrow">→</span>
+  </a>
+</section>
+
+<section class="enquiry">
+  <div class="wrap">
+    <h2>有相似的<em>挑戰</em>？<br>聊聊看。</h2>
+    <div class="enquiry-detail">
+      <div class="enquiry-block">
+        <span class="lbl">For enquiries</span>
+        <span class="val"><a href="mailto:hello.halfhumble@gmail.com" data-magnet>hello.halfhumble@gmail.com</a></span>
+      </div>
+      <a class="btn-parens is-light" href="../contact.html" data-magnet data-cursor-text="start" style="margin-top:24px;">start a project</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span>© 2026 陳翰博 / 半熟漢堡 Half Humble</span>
+  <span class="col-c">Built layer by layer in Taichung, Taiwan.
