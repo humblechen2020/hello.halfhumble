@@ -113,9 +113,26 @@
       curtain.classList.remove('is-entering');
     };
 
-    // 返回鍵／bfcache 還原：清掉離站殘留的 class，否則簾幕會卡住
+    // 返回鍵／bfcache 還原：SVG animation forwards 狀態會殘留在快照裡，
+    // 只移除 class 不夠，需要直接把 curtain 藏掉再強制 reflow 才能清乾淨
     window.addEventListener('pageshow', (e) => {
-      if (e.persisted) resetTransition();
+      if (!e.persisted) return;
+      // 1. 先整個隱藏（繞過所有 animation / transition）
+      curtain.style.display = 'none';
+      // 2. 移除殘留 class
+      document.body.classList.remove('is-leaving');
+      curtain.classList.remove('is-entering');
+      // 3. 直接重置 path d 屬性，清掉 forwards fill-mode 殘留
+      const path = curtain.querySelector('.page-curtain-path');
+      if (path) {
+        path.style.animation = 'none';
+        path.setAttribute('d', 'M 0 100 V 100 Q 50 100 100 100 V 100 z');
+      }
+      // 4. 強制 reflow，然後恢復顯示
+      void curtain.offsetWidth;
+      curtain.style.display = '';
+      if (path) path.style.animation = '';
+      isTransitioning = false;
     });
 
     const isInternal = (href) => {
