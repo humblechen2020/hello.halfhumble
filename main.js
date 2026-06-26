@@ -105,6 +105,19 @@
     // 進站清旗標即可——預設 .page-shell 就是 natural、不需要額外觸發
     sessionStorage.removeItem('hh_in_transit');
 
+    let isTransitioning = false;
+
+    const resetTransition = () => {
+      isTransitioning = false;
+      document.body.classList.remove('is-leaving');
+      curtain.classList.remove('is-entering');
+    };
+
+    // 返回鍵／bfcache 還原：清掉離站殘留的 class，否則簾幕會卡住
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) resetTransition();
+    });
+
     const isInternal = (href) => {
       if (!href) return false;
       if (href.startsWith('#')) return false;
@@ -114,7 +127,6 @@
       return true;
     };
 
-    let isTransitioning = false;
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a');
       if (!a) return;
@@ -131,6 +143,8 @@
       curtain.classList.add('is-entering');
       // 等簾幕完全覆蓋（≈1250ms）再切頁，下一頁就能在 curtain 後面安靜載入
       setTimeout(() => { window.location.href = href; }, TRANS_DUR - 50);
+      // 安全重置：萬一 navigation 失敗，2s 後自動解鎖，避免所有連結永久卡死
+      setTimeout(resetTransition, TRANS_DUR + 800);
     });
   }
 
