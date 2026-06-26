@@ -107,32 +107,30 @@
 
     let isTransitioning = false;
 
+    const curtainPath = curtain.querySelector('.page-curtain-path');
+    const HIDDEN_D = 'M 0 100 V 100 Q 50 100 100 100 V 100 z';
+
     const resetTransition = () => {
       isTransitioning = false;
       document.body.classList.remove('is-leaving');
       curtain.classList.remove('is-entering');
+      if (curtainPath) {
+        curtainPath.style.animation = 'none';
+        curtainPath.setAttribute('d', HIDDEN_D);
+        void curtain.offsetWidth; // force reflow
+        curtainPath.style.animation = '';
+      }
     };
 
-    // 返回鍵／bfcache 還原：SVG animation forwards 狀態會殘留在快照裡，
-    // 只移除 class 不夠，需要直接把 curtain 藏掉再強制 reflow 才能清乾淨
+    // 【關鍵】pagehide：頁面存入 bfcache 前先清掉簾幕，
+    // 讓快照本身就是乾淨的，這樣返回時不需要再修復
+    window.addEventListener('pagehide', (e) => {
+      if (e.persisted) resetTransition();
+    });
+
+    // pageshow：作為備用保險（某些瀏覽器可能在 pagehide 後仍快照舊狀態）
     window.addEventListener('pageshow', (e) => {
-      if (!e.persisted) return;
-      // 1. 先整個隱藏（繞過所有 animation / transition）
-      curtain.style.display = 'none';
-      // 2. 移除殘留 class
-      document.body.classList.remove('is-leaving');
-      curtain.classList.remove('is-entering');
-      // 3. 直接重置 path d 屬性，清掉 forwards fill-mode 殘留
-      const path = curtain.querySelector('.page-curtain-path');
-      if (path) {
-        path.style.animation = 'none';
-        path.setAttribute('d', 'M 0 100 V 100 Q 50 100 100 100 V 100 z');
-      }
-      // 4. 強制 reflow，然後恢復顯示
-      void curtain.offsetWidth;
-      curtain.style.display = '';
-      if (path) path.style.animation = '';
-      isTransitioning = false;
+      if (e.persisted) resetTransition();
     });
 
     const isInternal = (href) => {
