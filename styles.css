@@ -464,7 +464,7 @@ button:hover .hover-swap > span.hs-bottom,
 /* 案例頁雙語內容：data-i18n="zh"/"en" 成對出現，預設只顯示中文；
    按下 .lang-toggle 後 body 加上 .lang-en，整頁（含 Hero）一起切換成英文 */
 [data-i18n="en"] { display: none; }
-body.lang-en [data-i18n="en"] { display: revert; }
+body.lang-en [data-i18n="en"] { display: revert; visibility: visible; }
 body.lang-en [data-i18n="zh"] { display: none; }
 
 .header-cta {
