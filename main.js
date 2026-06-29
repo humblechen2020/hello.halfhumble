@@ -270,8 +270,11 @@
   const renderSplitNum = (el, raw) => {
     if (!el || el.dataset.splitRendered === '1') return;
     const str = String(raw).trim();
-    if (!/^\d+$/.test(str)) return;
-    const padded = str.length === 1 ? '0' + str : str;
+    const m = str.match(/^(\d+)(.*)$/);
+    if (!m) return;
+    const digits = m[1];
+    const suffix = m[2]; // e.g. "+"
+    const padded = digits.length === 1 ? '0' + digits : digits;
     el.textContent = '';
     el.classList.add('split-num');
     Array.from(padded).forEach(ch => {
@@ -280,6 +283,12 @@
       d.textContent = ch;
       el.appendChild(d);
     });
+    if (suffix) {
+      const s = document.createElement('span');
+      s.className = 'digit-suffix';
+      s.textContent = suffix;
+      el.appendChild(s);
+    }
     el.dataset.splitRendered = '1';
   };
   // 1) 明確標 data-split-num 的元素（hero stat 等）

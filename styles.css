@@ -3022,6 +3022,7 @@ body { background-color: transparent; }
   font-variant-numeric: tabular-nums;
 }
 .split-num .digit::before { content: "("; opacity: 0.55; margin-right: 1px; }
+.split-num .digit-suffix { opacity: 0.55; font-size: 0.75em; align-self: flex-start; margin-left: 1px; }
 .split-num .digit::after  { content: ")"; opacity: 0.55; margin-left: 1px; }
 
 /* ========== HEADER UTILITY BAR — 桌機顯示 role / 時區 / 連絡 ========== */
@@ -3521,22 +3522,4 @@ body { background-color: transparent; }
 @media (max-width: 639px) {
   .work-grid.is-list-mode {
     display: grid !important;
-    border-top: none;
-    padding-left: revert;
-    padding-right: revert;
-  }
-  .work-grid.is-list-mode .work-card {
-    display: flex !important;
-    flex-direction: column;
-    gap: 0;
-    padding: 0;
-    border-bottom: none;
-  }
-  .work-grid.is-list-mode .work-card .media,
-  .work-grid.is-list-mode .work-card .tagline,
-  .work-grid.is-list-mode .work-card .tags {
-    display: block !important;
-  }
-  .work-grid.is-list-mode .work-card .meta-row { display: flex; }
-  .work-list-preview { display: none !important; }
-}
+    b
