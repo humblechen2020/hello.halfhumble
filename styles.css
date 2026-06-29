@@ -1372,7 +1372,8 @@ body.is-menu-open { overflow: hidden; }
 .case-section ul li::before { content: "—"; position: absolute; left: 0; color: var(--ink-muted); }
 .case-block { margin-top: 32px; aspect-ratio: 16/9; background: var(--paper-deep); border: 1px solid var(--hairline); background-image: linear-gradient(135deg, rgba(14,14,14,0.04) 25%, transparent 25%, transparent 50%, rgba(14,14,14,0.04) 50%, rgba(14,14,14,0.04) 75%, transparent 75%); background-size: 18px 18px; }
 
-.next-case { border-top: 1px solid var(--hairline); padding: clamp(48px, 8vh, 100px) 0; background: var(--paper); position: relative; z-index: 1; }
+.next-case { border-top: 1px solid var(--hairline); padding: clamp(48px, 8vh, 100px) 0; position: relative; z-index: 1; }
+.next-case::before { content: ''; position: absolute; inset: 0; left: 50%; width: 100vw; margin-left: -50vw; background: var(--paper); z-index: -1; }
 
 /* ---- Case prev/next nav ---- */
 .case-nav-label {
