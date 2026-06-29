@@ -894,41 +894,49 @@
   const isWorkListPage = path.endsWith('work.html') || path.endsWith('/work') || path.endsWith('/work/');
   const workGridEl = $('.work-grid');
   if (isWorkListPage && workGridEl && !isTouch && !prefersReduced) {
-    workGridEl.classList.add('is-list-mode');
+    // Inject Grid / List toggle buttons into toolbar
+    const toolbar = $('.toolbar');
+    if (toolbar) {
+      const modesWrap = document.createElement('div');
+      modesWrap.className = 'modes';
+      modesWrap.innerHTML =
+        '<button class="mode-btn is-active" data-mode="grid" aria-label="Grid view">Grid</button>' +
+        '<button class="mode-btn" data-mode="list" aria-label="List view">List</button>';
+      toolbar.appendChild(modesWrap);
+
+      modesWrap.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          modesWrap.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          const mode = btn.getAttribute('data-mode');
+          workGridEl.classList.toggle('is-list-mode', mode === 'list');
+          if (mode !== 'list') preview.classList.remove('is-visible');
+        });
+      });
+    }
+
+    // Floating preview for list mode
     const preview = document.createElement('div');
     preview.className = 'work-list-preview';
-    preview.setAttribute('aria-hidden', 'true');
+    const previewImg = document.createElement('img');
+    previewImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+    preview.appendChild(previewImg);
     document.body.appendChild(preview);
 
-    let px = window.innerWidth / 2, py = window.innerHeight / 2;
-    let tx = px, ty = py;
     document.addEventListener('mousemove', (e) => {
-      tx = e.clientX + 28;
-      ty = e.clientY - 60;
+      if (!preview.classList.contains('is-visible')) return;
+      const pw = preview.offsetWidth;
+      const ph = preview.offsetHeight;
+      const x = Math.min(e.clientX + 28, window.innerWidth - pw - 16);
+      const y = Math.max(16, Math.min(e.clientY - ph / 2, window.innerHeight - ph - 16));
+      preview.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
     });
-    const tickPrev = () => {
-      px += (tx - px) * 0.16;
-      py += (ty - py) * 0.16;
-      preview.style.transform = 'translate3d(' + px.toFixed(1) + 'px, ' + py.toFixed(1) + 'px, 0)';
-      requestAnimationFrame(tickPrev);
-    };
-    tickPrev();
 
-    $$('.work-card').forEach(card => {
+    $$('.work-card', workGridEl).forEach(card => {
       card.addEventListener('mouseenter', () => {
-        const img = card.querySelector('img.placeholder');
-        if (img && img.getAttribute('src')) {
-          preview.style.backgroundImage = 'url("' + img.getAttribute('src') + '")';
-          preview.style.backgroundSize = 'cover';
-          preview.style.backgroundPosition = 'center';
-          preview.style.backgroundRepeat = 'no-repeat';
-          preview.textContent = '';
-        } else {
-          const h3 = card.querySelector('h3');
-          preview.style.backgroundImage = '';
-          preview.textContent = (h3 ? h3.textContent : '').trim();
-        }
-        preview.classList.add('is-visible');
+        if (!workGridEl.classList.contains('is-list-mode')) return;
+        const img = card.querySelector('.media img');
+        if (img) { previewImg.src = img.src; preview.classList.add('is-visible'); }
       });
       card.addEventListener('mouseleave', () => {
         preview.classList.remove('is-visible');
@@ -936,41 +944,4 @@
     });
   }
 
-  /* ---- Magnetic links ---- */
-  const magnets = $$('[data-magnet]');
-  if (!isTouch && !prefersReduced) {
-    magnets.forEach(el => {
-      el.addEventListener('mousemove', (e) => {
-        const r = el.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
-        const dx = (e.clientX - cx) * 0.18;
-        const dy = (e.clientY - cy) * 0.18;
-        el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
-      });
-      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
-    });
-  }
-
-  /* ---- Keyboard focus assist ---- */
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') document.body.classList.add('using-keyboard');
-  });
-  document.addEventListener('mousedown', () => {
-    document.body.classList.remove('using-keyboard');
-  });
-
-  /* ---- Form: textarea char counter ---- */
-  const counters = $$('[data-counter]');
-  counters.forEach(counter => {
-    const field = counter.parentElement;
-    const ta = field && field.querySelector('textarea');
-    if (!ta) return;
-    const max = parseInt(ta.getAttribute('maxlength') || '800', 10);
-    const update = () => {
-      counter.textContent = ta.value.length + ' / ' + max;
-    };
-    ta.addEventListener('input', update);
-    update();
-  });
 })();
