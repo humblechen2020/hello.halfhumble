@@ -1005,6 +1005,10 @@ body.is-menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .work-card .media::after { display: none; }
 }
+/* 手機 / 觸控裝置：無 hover 狀態，封面永遠蓋住圖片 → 直接關掉，讓作品圖片可見 */
+@media (hover: none), (pointer: coarse) {
+  .work-card .media::after { display: none; }
+}
 /* Parallax wrapper: 內層比 .media 高 20%（top/bottom 各 -10%），讓 scroll 視差移動時邊緣不會露白 */
 .work-card .media .media-parallax {
   position: absolute; left: 0; right: 0; top: -10%; bottom: -10%;
