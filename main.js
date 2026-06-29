@@ -847,6 +847,34 @@
       </div>`;
   })();
 
+  /* ---- 手機版：左右滑動切換案例（works/ 頁面才啟動）---- */
+  if (isTouch && location.pathname.includes('/works/')) {
+    let tx0 = 0, ty0 = 0;
+    document.addEventListener('touchstart', (e) => {
+      tx0 = e.changedTouches[0].clientX;
+      ty0 = e.changedTouches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - tx0;
+      const dy = e.changedTouches[0].clientY - ty0;
+      // 水平滑動 > 60px，且水平位移明顯大於垂直（排除一般滾動）
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.6) return;
+      const currentFile = location.pathname.split('/').pop();
+      const idx = CASE_ORDER.findIndex(c => c.file === currentFile);
+      if (idx === -1) return;
+      const total = CASE_ORDER.length;
+      const target = dx < 0
+        ? CASE_ORDER[(idx + 1) % total].file          // 左滑 → 下一個
+        : CASE_ORDER[(idx - 1 + total) % total].file; // 右滑 → 上一個
+      // 模擬點擊，觸發既有的 page-transition click handler
+      const a = document.createElement('a');
+      a.href = target;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }, { passive: true });
+  }
+
   /* ---- 案例頁中／英切換（lang-toggle）：預設中文，按鈕記住偏好 ---- */
   (function initLangToggle() {
     const KEY = 'hh-lang';

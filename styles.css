@@ -3510,4 +3510,28 @@ body { background-color: transparent; }
 .cs-summary ul { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-top: 0; }
 .cs-summary li { padding-left: 22px; position: relative; color: var(--ink-soft); font-size: 16px; line-height: 1.6; }
 .cs-summary li::before { content: "—"; position: absolute; left: 0; color: var(--indigo); }
-.cs-summary li b { color: var(--ink); font-weight: 700; }
+.cs-summary li b { color: var(--ink); font-weight: 700; }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+/* ---- Mobile safety: 螢幕寬度 < 640px 強制關閉 list-mode，
+   防止任何設備誤觸發時浮動預覽遮住卡片圖片 ---- */
+@media (max-width: 639px) {
+  .work-grid.is-list-mode {
+    display: grid !important;
+    border-top: none;
+    padding-left: revert;
+    padding-right: revert;
+  }
+  .work-grid.is-list-mode .work-card {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+  .work-grid.is-list-mode .work-card .media,
+  .work-grid.is-list-mode .work-card .tagline,
+  .work-grid.is-list-mode .work-card .tags {
+    display: block !important;
+  }
+  .work-grid.is-list-mode .work-card .meta-row { display: flex; }
+  .work-list-preview { display: none !important; }
+}
